@@ -1,0 +1,25 @@
+print("Student Name : Parveen")
+print("-" * 30)
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+X = [
+    [2, 16, 3000],
+    [4, 32, 4000],
+    [4, 64, 4500],
+    [6, 128, 5000],
+    [8, 256, 6000],
+    [2, 32, 3500],
+    [6, 64, 4800],
+    [8, 128, 5500]
+]
+y = [0, 0, 1, 2, 2, 0, 1, 2]
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42
+)
+model = RandomForestClassifier(random_state=42)
+model.fit(X_train, y_train)
+prediction = model.predict(X_test)
+print("Predicted Price Range:", prediction)
+print("Accuracy:", accuracy_score(y_test, prediction))
