@@ -1,0 +1,36 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score, classification_report
+
+data = {
+    "Age": [25, 35, 45, 28, 50, 32, 40, 29, 55, 38, 48, 27, 42, 31, 52],
+    "Income": [25000, 45000, 65000, 30000, 80000, 40000, 55000, 28000, 90000, 50000, 70000, 27000, 60000, 35000, 85000],
+    "LoanAmount": [100000, 200000, 300000, 120000, 400000, 180000, 250000, 110000, 450000, 220000, 350000, 100000, 280000, 150000, 420000],
+    "CreditScore": [650, 700, 750, 620, 800, 680, 720, 610, 820, 710, 760, 630, 740, 670, 810],
+    "LoanApproved": ["No", "Yes", "Yes", "No", "Yes", "Yes", "Yes", "No", "Yes", "Yes", "Yes", "No", "Yes", "No", "Yes"]
+}
+
+df = pd.DataFrame(data)
+
+encoder = LabelEncoder()
+df["LoanApproved"] = encoder.fit_transform(df["LoanApproved"])
+
+X = df[["Age", "Income", "LoanAmount", "CreditScore"]]
+y = df["LoanApproved"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+model = GaussianNB()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Actual Values:", y_test.values)
+print("Predicted Values:", y_pred)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred, target_names=["No", "Yes"]))
